@@ -1,16 +1,16 @@
----
-title: "Exploration for Shiny App  "
-author: "Tiffany Sun (tsun28@amherst.edu)"
-format: 
-  html
-date: "`r Sys.Date()`"
-editor: source
-knitr:
-  opts_chunk:
-    fig.align: center
----
-
-```{r}
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
 #| label: packages
 #| echo: FALSE
 #| message: FALSE
@@ -21,12 +21,10 @@ knitr::opts_chunk$set(
 library(tidyverse)
 library(purrr)
 library(rvest)
-library(playwrightr)
 
-
-```
-
-```{r}
+#
+#
+#
 #| label: wrangling data
 
 sets <- read.csv("sets.csv", TRUE)
@@ -45,9 +43,9 @@ data <- left_join(sets, themes, by = join_by(theme_id == id)) |>
     # Removed lego-merchandise
     filter(parent_theme != "Gear", parent_theme != "Books")
 
-```
-
-```{r}
+#
+#
+#
 #| label: Top Ten Lego Themes with Most Sets Released
 
 data |>
@@ -66,9 +64,9 @@ data |>
     ) + 
     theme_grey()
 
-```
-
-```{r}
+#
+#
+#
 #| label: Top 10 Themes with Most Parts on Average per Set
 data |>
     group_by(theme) |>
@@ -86,9 +84,9 @@ data |>
     ) + 
     theme_grey()
 
-```
-
-```{r}
+#
+#
+#
 #| label: Top Ten Parent Themes with Most Themes
 data |>
     group_by(parent_theme) |>
@@ -106,9 +104,9 @@ data |>
     ) + 
     theme_grey()
 
-```
-
-```{r}
+#
+#
+#
 #| label: Lego Sets Released from 1949 - 2026
 
 data |>
@@ -123,9 +121,9 @@ data |>
     ) + 
     theme_grey()
 
-```
-
-```{r}
+#
+#
+#
 #| label: Lego Sets Released Per Theme (Filters)
 
 data |>
@@ -141,9 +139,9 @@ data |>
     ) + 
     theme_grey()
 
-```
-
-```{r}
+#
+#
+#
 #| label: webscraping brickset
 set_urls <- paste0("https://brickset.com/sets/", data$set_num[394:404])
 
@@ -181,17 +179,18 @@ webdata$price <- map_dbl(webdata$url, function(p) {
 })
 
 for (url in set_urls) {
+    Sys.sleep(3)
     vals <-  read_html_live(url) |>
      html_elements(".featurebox.bricklink a.plain") |>
             html_text(trim = TRUE) |>
             str_extract("\\d+\\.?\\d*") |>
             na.omit()
-   if (length(vals) > 0) {
-  print(as.numeric(vals[1]))
-} else {
-  print(NA_real_)
-}
-
+    if (!is.na(vals[1])) {
+            print(as.numeric(vals[1]))
+            as.numeric(vals[1])
+        } else {
+            print(NA_real_)
+        }
 }
 
 page <- read_html_live("https://brickset.com/sets/10342-1")
@@ -201,13 +200,11 @@ t <- page |> html_elements(".featurebox.bricklink a.plain") |>
             html_text(trim = TRUE) |>
             str_extract("\\d+\\.?\\d*") |>
             na.omit()
-
-if (length(t) > 0) {
-  as.numeric(t[1])
-} else {
-  NA_real_
-}
-
+ if (!is.na(t[1])) {
+            as.numeric(t[1])
+        } else {
+            NA_real_
+        }
 
 
 page |> html_element(".featurebox.bricklink a.plain") 
@@ -215,4 +212,6 @@ page |> html_element(".featurebox.bricklink a.plain")
 
 
 
-```
+#
+#
+#
